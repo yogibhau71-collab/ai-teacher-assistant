@@ -183,7 +183,7 @@ Learning Objectives: ${objectives||'Suggest suitable objectives.'}
 Include teaching objectives, previous knowledge, teaching materials, introduction, teacher activities, student activities, evaluation, homework and blackboard summary.`;
 }
 
-document.getElementById(type).textContent=prompt;
+askGemini(prompt, type);
 }
 
 async function copyOutput(id){
