@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Teacher Assistant</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fb;color:#20243a}
+header{background:#29245c;color:white;padding:27px 15px;text-align:center}
+header h1{margin:0 0 8px;font-size:27px}
+header p{margin:0;color:#dedcf7}
+.container{max-width:850px;margin:25px auto;padding:15px}
+.card{background:white;border-radius:15px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px #18204412}
+h2{margin-top:0;color:#30266e;font-size:21px}
+label{display:block;font-weight:bold;margin:15px 0 7px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d5d8e5;border-radius:8px;font-size:16px;background:white}
+textarea{min-height:90px}
+button{border:0;border-radius:9px;padding:13px 18px;background:#5145c5;color:white;font-size:15px;font-weight:bold;cursor:pointer;margin-top:15px}
+.secondary{background:#e9e7fa;color:#30266e}
+.output{background:#f2f0ff;border:1px solid #d9d3ff;padding:15px;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:70px;margin-top:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+footer{text-align:center;padding:25px;color:#777;font-size:12px}
+footer strong{color:#5145c5}
+@media(max-width:550px){.grid{grid-template-columns:1fr}.card{padding:16px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>📚 AI Teacher Assistant</h1>
+<p>Smart Educational Tools for Teachers and Students</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+<h2>🎓 Teacher & Student Details</h2>
+<div class="grid">
+<div>
+<label>Class / इयत्ता</label>
+<select id="grade">
+<option>Class 5</option><option>Class 6</option>
+<option>Class 7</option><option>Class 8</option>
+<option>Class 9</option><option>Class 10</option>
+<option>Class 11</option><option>Class 12</option>
+</select>
+</div>
+<div>
+<label>Language / भाषा</label>
+<select id="language">
+<option>Marathi</option><option>English</option><option>Hindi</option>
+</select>
+</div>
+</div>
+<label>Subject / विषय</label>
+<input id="subject" placeholder="उदा. Geography, Science, History">
+<label>Chapter / Topic / घटक</label>
+<input id="topic" placeholder="घटकाचे नाव लिहा">
+</section>
+
+<section class="card">
+<h2>📝 MCQ Generator</h2>
+<div class="grid">
+<div>
+<label>Number of Questions</label>
+<select id="count">
+<option>5</option><option>10</option><option>15</option>
+<option>20</option><option>25</option><option>50</option>
+</select>
+</div>
+<div>
+<label>Difficulty Level</label>
+<select id="level">
+<option>Easy</option><option>Medium</option><option>Hard</option>
+</select>
+</div>
+</div>
+<button onclick="generate('mcq')">Generate MCQ Prompt</button>
+<div id="mcq" class="output">Your MCQ prompt will appear here.</div>
+<button class="secondary" onclick="copyOutput('mcq')">Copy Prompt</button>
+</section>
+
+<section class="card">
+<h2>📄 Question Paper Generator</h2>
+<label>Total Marks</label>
+<select id="marks">
+<option>20</option><option>25</option><option>40</option>
+<option>50</option><option>80</option><option>100</option>
+</select>
+<label>Exam Type</label>
+<select id="exam">
+<option>Unit Test</option><option>Annual Examination</option>
+<option>Practice Test</option><option>Weekly Test</option>
+</select>
+<button onclick="generate('paper')">Generate Paper Prompt</button>
+<div id="paper" class="output">Your question paper prompt will appear here.</div>
+<button class="secondary" onclick="copyOutput('paper')">Copy Prompt</button>
+</section>
+
+<section class="card">
+<h2>👨‍🏫 Lesson Plan Generator</h2>
+<label>Teaching Duration</label>
+<select id="duration">
+<option>30 Minutes</option><option>35 Minutes</option>
+<option>40 Minutes</option><option>45 Minutes</option>
+</select>
+<label>Learning Objectives</label>
+<textarea id="objectives" placeholder="Learning objectives (optional)"></textarea>
+<button onclick="generate('lesson')">Generate Lesson Plan Prompt</button>
+<div id="lesson" class="output">Your lesson plan prompt will appear here.</div>
+<button class="secondary" onclick="copyOutput('lesson')">Copy Prompt</button>
+</section>
+
+</main>
+
+<footer>
+AI Teacher Assistant | Open Source Project<br>
+Version 0.1.0 | MIT License<br><br>
+Developed by <strong>Yogi Sir</strong>
+</footer>
+
+<script>
+function getDetails(){
+const grade=document.getElementById('grade').value;
+const language=document.getElementById('language').value;
+const subject=document.getElementById('subject').value.trim();
+const topic=document.getElementById('topic').value.trim();
+
+if(!subject||!topic){
+alert('Please enter Subject and Chapter / Topic.');
+return null;
+}
+return {grade,language,subject,topic};
+}
+
+function generate(type){
+const d=getDetails();
+if(!d)return;
+let prompt='';
+
+if(type==='mcq'){
+const count=document.getElementById('count').value;
+const level=document.getElementById('level').value;
+prompt=`Create ${count} MCQs.
+
+Class: ${d.grade}
+Subject: ${d.subject}
+Topic: ${d.topic}
+Language: ${d.language}
+Difficulty: ${level}
+
+Provide four options (A, B, C, D), correct answers and short explanations. Avoid duplicate questions and ensure factual accuracy.`;
+}
+
+if(type==='paper'){
+const marks=document.getElementById('marks').value;
+const exam=document.getElementById('exam').value;
+prompt=`Prepare a ${exam} question paper.
+
+Class: ${d.grade}
+Subject: ${d.subject}
+Topic: ${d.topic}
+Language: ${d.language}
+Total Marks: ${marks}
+
+Include instructions, MCQs, short answers, long answers, marks for each question and an answer key. Ensure total marks equal ${marks}.`;
+}
+
+if(type==='lesson'){
+const duration=document.getElementById('duration').value;
+const objectives=document.getElementById('objectives').value;
+prompt=`Prepare a detailed lesson plan.
+
+Class: ${d.grade}
+Subject: ${d.subject}
+Topic: ${d.topic}
+Language: ${d.language}
+Duration: ${duration}
+Learning Objectives: ${objectives||'Suggest suitable objectives.'}
+
+Include teaching objectives, previous knowledge, teaching materials, introduction, teacher activities, student activities, evaluation, homework and blackboard summary.`;
+}
+
+document.getElementById(type).textContent=prompt;
+}
+
+async function copyOutput(id){
+const text=document.getElementById(id).textContent;
+if(!text||text.includes('will appear here')){
+alert('Generate the prompt first.');
+return;
+}
+try{
+await navigator.clipboard.writeText(text);
+alert('Prompt copied successfully!');
+}catch(e){
+alert('Please select and copy the prompt manually.');
+}
+}
+</script>
+</body>
+</html>
