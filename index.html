@@ -445,10 +445,32 @@ document.querySelectorAll("[data-copy]").forEach(button => {
   });
 });
 </script>
-</body>
-  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function downloadPDF() {
+  const result = document.getElementById("result");
+
+  if (!result || !result.innerText.trim()) {
+    alert("आधी उत्तर तयार करा.");
+    return;
+  }
+
+  html2pdf().set({
+    margin: 10,
+    filename: "AI-Teacher-Assistant.pdf",
+    html2canvas: { scale: 2 },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    }
+  }).from(result).save();
+}
+</script>
 <button onclick="downloadPDF()">
   📄 Download PDF
 </button>
 
+</body>
 </html>
