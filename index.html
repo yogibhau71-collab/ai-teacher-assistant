@@ -219,8 +219,10 @@ async function askGemini(prompt, outputId) {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.error || "AI request failed");
-    }
+      throw new Error(
+  (data.error || "AI request failed") +
+  (data.details ? ": " + data.details : "")
+);
 
     output.textContent = data.answer;
   } catch (error) {
